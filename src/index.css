@@ -1,0 +1,147 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  /* Sun King inspired green/yellow palette */
+  --background: #FFFFFF;
+  --foreground: #111827;
+  --card: #FFFFFF;
+  --card-foreground: #111827;
+  --popover: #FFFFFF;
+  --popover-foreground: #111827;
+  --primary: #00A651;
+  --primary-foreground: #FFFFFF;
+  --secondary: #F9D926;
+  --secondary-foreground: #111827;
+  --muted: #F3F4F6;
+  --muted-foreground: #4B5563;
+  --accent: #ECFDF5;
+  --accent-foreground: #065F46;
+  --destructive: #E11D48;
+  --destructive-foreground: #FFFFFF;
+  --border: #E5E7EB;
+  --input: #E5E7EB;
+  --ring: #00A651;
+  --chart-1: #00A651;
+  --chart-2: #F9D926;
+  --chart-3: #10B981;
+  --chart-4: #0EA5E9;
+  --chart-5: #F59E0B;
+  --radius: 0.5rem;
+  --sidebar: #FAFAFA;
+  --sidebar-foreground: #111827;
+  --sidebar-primary: #00A651;
+  --sidebar-primary-foreground: #FFFFFF;
+  --sidebar-accent: #ECFDF5;
+  --sidebar-accent-foreground: #065F46;
+  --sidebar-border: #E5E7EB;
+  --sidebar-ring: #00A651;
+
+  /* Status colors */
+  --success: #10B981;
+  --success-foreground: #FFFFFF;
+  --warning: #F59E0B;
+  --warning-foreground: #111827;
+  --info: #0EA5E9;
+  --info-foreground: #FFFFFF;
+}
+
+.dark {
+  --background: #111827;
+  --foreground: #F9FAFB;
+  --card: #1F2937;
+  --card-foreground: #F9FAFB;
+  --popover: #1F2937;
+  --popover-foreground: #F9FAFB;
+  --primary: #34D399;
+  --primary-foreground: #111827;
+  --secondary: #F9D926;
+  --secondary-foreground: #111827;
+  --muted: #374151;
+  --muted-foreground: #9CA3AF;
+  --accent: #064E3B;
+  --accent-foreground: #D1FAE5;
+  --destructive: #F43F5E;
+  --destructive-foreground: #FFFFFF;
+  --border: #374151;
+  --input: #374151;
+  --ring: #34D399;
+  --chart-1: #34D399;
+  --chart-2: #F9D926;
+  --chart-3: #6EE7B7;
+  --chart-4: #38BDF8;
+  --chart-5: #FBBF24;
+  --sidebar: #1F2937;
+  --sidebar-foreground: #F9FAFB;
+  --sidebar-primary: #34D399;
+  --sidebar-primary-foreground: #111827;
+  --sidebar-accent: #064E3B;
+  --sidebar-accent-foreground: #D1FAE5;
+  --sidebar-border: #374151;
+  --sidebar-ring: #34D399;
+
+  --success: #34D399;
+  --success-foreground: #111827;
+  --warning: #FBBF24;
+  --warning-foreground: #111827;
+  --info: #38BDF8;
+  --info-foreground: #111827;
+}
+
+@theme inline {
+  --font-sans: 'Inter', 'Geist', 'Geist Fallback', sans-serif;
+  --font-mono: 'Geist Mono', 'Geist Mono Fallback';
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+  --color-info: var(--info);
+  --color-info-foreground: var(--info-foreground);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
