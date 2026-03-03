@@ -1,5 +1,6 @@
 import { Routes, Route, Navigate } from 'react-router-dom'
 import { useAuth } from './context/auth-provider'
+import SeedPage from "@/pages/ims/SeedPage"
 import LoginPage from './pages/LoginPage'
 import { AppShell } from './components/smart-process/app-shell'
 
@@ -22,6 +23,7 @@ export default function App() {
   return (
     <Routes>
       <Route path="/login" element={<LoginPage />} />
+      <Route path="/seed" element={<SeedPage />} />
       <Route
         path="/*"
         element={
