@@ -218,50 +218,68 @@ export function CheckerView() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="flex-1 overflow-y-auto space-y-6 p-4 lg:p-8">
       <div>
         <h1 className="text-2xl font-bold text-foreground">Pending Actions</h1>
-        <p className="mt-1 text-sm text-muted-foreground">Review and take action on submitted requests.</p>
+        <p className="mt-1 text-sm text-muted-foreground">
+          Review and take action on submitted requests.
+        </p>
       </div>
       <div className="space-y-2">
         {isLoading ? (
-          Array.from({ length: 3 }).map((_, i) => <SubmissionRowSkeleton key={i} />)
+          Array.from({ length: 3 }).map((_, i) => (
+            <SubmissionRowSkeleton key={i} />
+          ))
         ) : pendingSubmissions.length === 0 ? (
           <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-border bg-card py-12 text-center">
             <CheckCircle2 className="size-10 text-green-500" />
-            <p className="mt-3 text-sm font-medium text-foreground">All caught up!</p>
-            <p className="mt-1 text-xs text-muted-foreground">No pending items require your attention.</p>
+            <p className="mt-3 text-sm font-medium text-foreground">
+              All caught up!
+            </p>
+            <p className="mt-1 text-xs text-muted-foreground">
+              No pending items require your attention.
+            </p>
           </div>
         ) : (
           pendingSubmissions.map((submission) => {
-            const flow = processFlows.find((p) => p.id === submission.processType)
-            const FlowIcon = iconMap[flow?.icon ?? "box"] ?? Package
+            const flow = processFlows.find(
+              (p) => p.id === submission.processType,
+            );
+            const FlowIcon = iconMap[flow?.icon ?? "box"] ?? Package;
             return (
               <button
                 key={submission.id}
                 onClick={() => setSelectedSubmission(submission)}
-                className={cn("flex w-full items-center gap-4 rounded-xl border border-border bg-card p-4 text-left transition-colors hover:border-primary/30 hover:bg-accent/50")}
+                className={cn(
+                  "flex w-full items-center gap-4 rounded-xl border border-border bg-card p-4 text-left transition-colors hover:border-primary/30 hover:bg-accent/50",
+                )}
               >
                 <div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-accent">
                   <FlowIcon className="size-4 text-primary" />
                 </div>
                 <div className="flex min-w-0 flex-1 flex-col gap-0.5">
-                  <span className="truncate text-sm font-medium text-card-foreground">{submission.title}</span>
+                  <span className="truncate text-sm font-medium text-card-foreground">
+                    {submission.title}
+                  </span>
                   <div className="flex items-center gap-2 text-xs text-muted-foreground">
                     <span>{submission.requestId}</span>
                     <span>·</span>
                     <span>{submission.submittedBy}</span>
                     <span>·</span>
-                    <span>{formatDistanceToNow(toDate(submission.submittedAt), { addSuffix: true })}</span>
+                    <span>
+                      {formatDistanceToNow(toDate(submission.submittedAt), {
+                        addSuffix: true,
+                      })}
+                    </span>
                   </div>
                 </div>
                 <StatusBadge status={submission.status} />
                 <ChevronRight className="size-4 shrink-0 text-muted-foreground" />
               </button>
-            )
+            );
           })
         )}
       </div>
     </div>
-  )
+  );
 }
