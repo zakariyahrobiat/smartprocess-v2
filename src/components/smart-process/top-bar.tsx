@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { useState } from "react"
 import { useAuth } from "@/context/auth-provider"
+import { Link } from "react-router-dom"
 
 interface TopBarProps {
   onToggleSidebar: () => void
@@ -53,10 +54,12 @@ export function TopBar({ onToggleSidebar }: TopBarProps) {
             </g>
           </svg>
         </div>
+        <Link to='/'>
         <div className="hidden sm:flex flex-col">
           <span className="text-sm font-bold leading-tight text-foreground">Sun King</span>
           <span className="text-[10px] leading-tight text-muted-foreground">SmartProcess</span>
         </div>
+        </Link>
       </div>
 
       <div className="ml-auto flex flex-1 items-center justify-end gap-2 md:justify-center">

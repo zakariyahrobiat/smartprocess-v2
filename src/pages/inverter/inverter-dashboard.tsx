@@ -1,9 +1,9 @@
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { UnitAssignmentTab } from "./unit-assignment-tab"
-import { PaymentConfirmationTab } from "./payment-confirmation-tab"
-import { ComponentAssignmentTab } from "./component-assignment-tab"
-import { AnalyticsTab } from "./analytics-tab"
+import { UnitAssignmentTab } from "../../components/inverter-dashboard/unit-assignment-tab"
+import { PaymentConfirmationTab } from "../../components/inverter-dashboard/payment-confirmation-tab"
+import { ComponentAssignmentTab } from "../../components/inverter-dashboard/component-assignment-tab"
+import { AnalyticsTab } from "../../components/inverter-dashboard/analytics-tab"
 import {
   Cpu,
   CreditCard,
@@ -13,8 +13,8 @@ import {
 
 export function InverterDashboard() {
   return (
-    <div className="space-y-6">
-      {/* Header */}
+    
+         <div className="flex-1 overflow-y-auto space-y-6 p-4 lg:p-8">
       <div>
         <div className="flex items-center gap-3">
           <div className="flex size-10 items-center justify-center rounded-lg bg-secondary">

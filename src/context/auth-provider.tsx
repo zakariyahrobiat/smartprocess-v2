@@ -53,7 +53,7 @@ interface AuthContextValue {
   updateRolePermission: (roleId: string, perm: Permission, enabled: boolean) => void
   addRole: (role: RoleDefinition) => void
   deleteRole: (roleId: string) => void
-}
+  }
 
 const AuthContext = createContext<AuthContextValue | null>(null)
 
@@ -171,7 +171,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       signOutUser,
       updateRolePermission,
       addRole,
-      deleteRole,
+      deleteRole, 
     }),
     [currentUser, currentRole, roles, can, accessibleProjects, accessibleModules, loading]
   )

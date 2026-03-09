@@ -31,6 +31,10 @@ export const IMS_COUNTRIES = [
 ] as const
 export type IMSCountry = (typeof IMS_COUNTRIES)[number]
 
+export const IMS_CURRENCIES = [
+  "NGN", "SLE", "XAF", "XOF", "ZAR", 'USD', 'EUR', 'GBP', 
+] 
+
 export const AMOUNT_THRESHOLDS: Record<IMSCountry, number> = {
   Nigeria: 20_000_000,
   "Sierra Leone": 250_000,
@@ -88,7 +92,7 @@ export interface InvoiceFormData {
   department: string
   amount: number
   currency: string
-  poNumber?: string
+  poNumber?: string 
   description: string
   location: IMSCountry
   managers: Manager[]
@@ -183,6 +187,15 @@ export async function getAllInvoices(): Promise<Invoice[]> {
   const q = query(collection(db, "invoices"), orderBy("createdAt", "desc"))
   const snap = await getDocs(q)
   return snap.docs.map(d => ({ id: d.id, ...d.data() } as Invoice))
+}
+
+export async function getInvoiceById(id: string): Promise<Invoice | null> {
+  const ref = doc(db, "invoices", id);
+  const snap = await getDoc(ref);
+
+  if (!snap.exists()) return null;
+
+  return { id: snap.id, ...snap.data() } as Invoice;
 }
 
 export async function getPendingInvoicesForApprover(email: string): Promise<Invoice[]> {
