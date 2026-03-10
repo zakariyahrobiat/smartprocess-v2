@@ -2,7 +2,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useAuth } from "@/context/auth-provider";
 import { getInvoiceById, type Invoice } from "@/lib/imsService";
-import InvoiceDetail from "@/components/invoice/invoiceDetail";
+import InvoiceDetail from "@/components/ims/invoiceDetail";
 
 export default function InvoiceDetailPage() {
   const { id } = useParams();

@@ -2,8 +2,11 @@ import {
   collection, addDoc, getDocs, doc, updateDoc, query,
   where, orderBy, onSnapshot, serverTimestamp, getDoc,
   type Unsubscribe,
+  FieldValue,
+  Timestamp,
 } from "firebase/firestore"
 import { db } from "./firebase"
+import type { Refund, RefundFormData } from "./imsTypes"
 
 // ─── Types ────────────────────────────────────────────────────────────
 
@@ -84,6 +87,25 @@ export interface Invoice {
   approvalDate?: unknown
   managers: Manager[]
 }
+export interface Refund {
+  id?: string;
+  referenceNumber: string;
+  submitterEmail: string;
+  submitterName: string;
+  submissionDate: unknown;
+  country: IMSCountry;
+  customerName: string;
+  accountNumber: string;
+  bankName: string;
+  currency: string;
+  amount: number;
+  ccEmails: string;
+  status: RefundStatus;
+  reason: string;
+  rejectionReason?: string;
+  approvalDate?: unknown;
+  receivableApprovalDate?: unknown;
+}
 
 export interface InvoiceFormData {
   invoiceNo: string
@@ -123,6 +145,85 @@ function generateRequestId(): string {
   for (let i = 0; i < 8; i++) result += chars[Math.floor(Math.random() * chars.length)]
   return result
 }
+export async function submitRefundToFirestore(
+  data: RefundFormData,
+  submitterEmail: string,
+  submitterName: string,
+): Promise<string> {
+  // Duplicate reference check
+  const q = query(
+    collection(db, "refunds"),
+    where("referenceNumber", "==", data.referenceNumber),
+    where("country", "==", data.country),
+  );
+  const existing = await getDocs(q);
+  if (!existing.empty)
+    throw new Error("This Reference Number already exists for this country");
+
+  const refund: Omit<Refund, "id"> = {
+    referenceNumber: data.referenceNumber,
+    submitterEmail,
+    customerName: data.customerName,
+    submissionDate: Timestamp.now(),
+    country: data.country,
+    accountNumber: data.accountNumber,
+    bankName: data.bankName,
+    currency: data.currency,
+    amount: data.amount,
+    ccEmails: data.ccEmails,
+    status: "Pending Receivable Approval",
+    reason: data.reason,
+    history: [{
+      timestamp: Timestamp.now(),
+      action: "Submitted",
+      userEmail: submitterEmail,
+    }],
+  };
+  const ref = await addDoc(collection(db, "refunds"), refund);
+  return ref.id;
+}
+
+export async function getRefundById(id: string): Promise<Refund | null> {
+  const ref = doc(db, "refunds", id);
+  const snap = await getDoc(ref);
+
+  if (!snap.exists()) return null;
+
+  return {
+    id: snap.id,
+    ...snap.data(),
+  } as Refund;
+}
+
+export function subscribeToMyRefunds(
+  email: string,
+  cb: (r: Refund[]) => void,
+): Unsubscribe {
+  const q = query(
+    collection(db, "refunds"),
+    where("submitterEmail", "==", email),
+    orderBy("submissionDate", "desc"),
+  );
+  return onSnapshot(q, (snap) =>
+    cb(snap.docs.map((d) => ({ id: d.id, ...d.data() }) as Refund)),
+  );
+}
+
+export function subscribeToAllRefunds(cb: (r: Refund[]) => void): Unsubscribe {
+  const q = query(collection(db, "refunds"), orderBy("submissionDate", "desc"));
+  return onSnapshot(q, (snap) =>
+    cb(snap.docs.map((d) => ({ id: d.id, ...d.data() }) as Refund)),
+  );
+}
+
+export async function updateRefundStatus(
+  id: string,
+  updates: Partial<Refund>,
+): Promise<void> {
+  await updateDoc(doc(db, "refunds", id), { ...updates });
+}
+
+
 
 export async function submitInvoice(
   formData: InvoiceFormData,

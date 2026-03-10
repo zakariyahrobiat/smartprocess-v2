@@ -1,36 +1,23 @@
-import type { Invoice } from "@/lib/imsService";
 import { cn } from "@/lib/utils";
 
-const WORKFLOW_STEPS = [
-  "Submitted",
-  "Line Manager",
-  "Finance",
-  "Senior Mgr",
-  "Approved",
-];
+interface WorkflowStepperProps {
+  steps: string[];
+  currentStep: number;
+  status?: string;
+}
 
-function WorkflowStepper({ invoice }: { invoice: Invoice }) {
-  const statusToStep: Record<string, number> = {
-    "Pending Line Manager Approval": 1,
-    "Pending Finance Approval": 2,
-    "Pending Manager Approval": 3,
-    Approved: 4,
-    Processing: 4,
-    Paid: 4,
-    Rejected: -1,
-  };
-  const isProcurement = invoice.department === "Operation & Procurement";
-  const steps = isProcurement
-    ? ["Submitted", "Finance", "Senior Mgr", "Approved"]
-    : WORKFLOW_STEPS;
-  const currentStep = statusToStep[invoice.status] ?? 0;
-
+export default function WorkflowStepper({
+  steps,
+  currentStep,
+  status,
+}: WorkflowStepperProps) {
   return (
     <div className="flex items-center gap-0 w-full">
       {steps.map((step, i) => {
         const isComplete = i < currentStep;
         const isCurrent = i === currentStep;
-        const isRejected = invoice.status === "Rejected";
+        const isRejected = status === "Rejected";
+
         return (
           <div key={step} className="flex items-center flex-1">
             <div className="flex flex-col items-center gap-1">
@@ -48,6 +35,7 @@ function WorkflowStepper({ invoice }: { invoice: Invoice }) {
               >
                 {isComplete ? "✓" : i + 1}
               </div>
+
               <span
                 className={cn(
                   "text-[10px] text-center leading-tight w-16",
@@ -61,6 +49,7 @@ function WorkflowStepper({ invoice }: { invoice: Invoice }) {
                 {step}
               </span>
             </div>
+
             {i < steps.length - 1 && (
               <div
                 className={cn(
@@ -75,4 +64,3 @@ function WorkflowStepper({ invoice }: { invoice: Invoice }) {
     </div>
   );
 }
-export default WorkflowStepper

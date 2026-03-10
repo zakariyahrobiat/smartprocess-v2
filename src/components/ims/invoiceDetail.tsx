@@ -5,9 +5,10 @@ import { toast } from "sonner";
 import FormatAmount from "../formatAmount";
 import { cn } from "@/lib/utils";
 import { Button } from "../ui/button";
-import StatusBadge from "./statusBadge";
-import WorkflowStepper from "./workFlow";
 import { useNavigate } from "react-router";
+import DetailHeader from "./detailsHeader";
+import DetailCard from "./detailsCard";
+import { InvoiceStepper } from "./invoiceWorkFlow";
 
 function InvoiceDetail({
   invoice,
@@ -123,42 +124,26 @@ function InvoiceDetail({
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center gap-3">
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={() => navigate("/ims/invoices")}
-          className="text-foreground"
-        >
-          <ArrowLeft className="size-4" />
-        </Button>
-        <div className="flex-1">
-          <div className="flex items-center gap-2 flex-wrap">
-            <h1 className="text-xl font-bold text-foreground">
-              {invoice.vendor}
-            </h1>
-            <StatusBadge status={invoice.status} />
-          </div>
-          <p className="text-sm text-muted-foreground">
-            {invoice.requestId} · {invoice.invoiceNumber}
-          </p>
-        </div>
-      </div>
+      <DetailHeader
+        type="invoice"
+        title={invoice.vendor}
+        subtitle={`${invoice.requestId} · ${invoice.invoiceNumber}`}
+        status={invoice.status}
+        onBack={() => navigate("/ims/invoices")}
+      />
 
       {/* Workflow */}
       <div className="rounded-xl border border-border bg-card p-5">
-        <WorkflowStepper invoice={invoice} />
+        <InvoiceStepper invoice={invoice} />
       </div>
 
       <div className="grid gap-6 lg:grid-cols-5">
         {/* Details (60%) */}
         <div className="lg:col-span-3 space-y-4">
           <div className="rounded-xl border border-border bg-card p-5">
-            <h2 className="text-sm font-semibold text-foreground mb-4">
-              Invoice Details
-            </h2>
-            <dl className="grid gap-3 sm:grid-cols-2">
-              {[
+            <DetailCard
+              title="Invoice Details"
+              items={[
                 {
                   icon: User,
                   label: "Submitted By",
@@ -185,28 +170,9 @@ function InvoiceDetail({
                   value: invoice.poNumber || "N/A",
                 },
                 { icon: Building2, label: "Country", value: invoice.country },
-              ].map(({ icon: Icon, label, value }) => (
-                <div key={label} className="flex items-start gap-2">
-                  <Icon className="mt-0.5 size-4 text-muted-foreground shrink-0" />
-                  <div>
-                    <dt className="text-xs text-muted-foreground">{label}</dt>
-                    <dd className="text-sm font-medium text-foreground">
-                      {value}
-                    </dd>
-                  </div>
-                </div>
-              ))}
-              <div className="flex items-start gap-2 sm:col-span-2">
-                <FileText className="mt-0.5 size-4 text-muted-foreground shrink-0" />
-                <div>
-                  <dt className="text-xs text-muted-foreground">Description</dt>
-                  <dd className="text-sm text-foreground leading-relaxed">
-                    {invoice.description}
-                  </dd>
-                </div>
-              </div>
-            </dl>
-          </div>
+              ]}
+            />
+                    </div>
 
           {/* Approval chain */}
           <div className="rounded-xl border border-border bg-card p-5">

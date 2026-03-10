@@ -118,23 +118,24 @@ export interface RefundHistoryEntry {
 }
 
 export interface Refund {
-  id?: string                          // Firestore doc ID
-  referenceNumber: string
-  submitterEmail: string
-  submissionDate: Timestamp
-  country: IMSCountry
-  customerName: string
-  accountNumber: string                // exactly 10 digits
-  bankName: string
-  currency: string
-  amount: number
-  ccEmails: string
-  status: RefundStatus
-  approvalDate?: Timestamp
-  receivableApprovalDate?: Timestamp
-  reason: string
-  rejectionReason?: string
-  history: RefundHistoryEntry[]
+  id?: string; // Firestore doc ID
+  referenceNumber: string;
+  submitterEmail: string;
+  submitterName: string;
+  submissionDate: Timestamp;
+  country: IMSCountry;
+  customerName: string;
+  accountNumber: string; // exactly 10 digits
+  bankName: string;
+  currency: string;
+  amount: number;
+  ccEmails: string;
+  status: RefundStatus;
+  approvalDate?: Timestamp;
+  receivableApprovalDate?: Timestamp;
+  reason: string;
+  rejectionReason?: string;
+  history: RefundHistoryEntry[];
 }
 
 // Form data for new refund submission
