@@ -18,6 +18,8 @@ import InvoicesPage from './pages/ims/InvoicesPage'
 import InvoiceForm from './components/inputs/invoiceForm'
 import RefundsPage from './pages/ims/RefundsPage'
 import InvoiceDetailPage from './pages/ims/invoiceDetailsPage'
+import RefundForm from './components/inputs/refundForm'
+import RefundDetailsPage from './pages/ims/refundDetailsPage'
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { currentUser, loading } = useAuth()
@@ -81,6 +83,8 @@ export default function App() {
           <Route path="invoices/new" element={<InvoiceForm />} />
           <Route path="invoices/:id" element={<InvoiceDetailPage />} />
           <Route path="refunds" element={<RefundsPage />} />
+          <Route path="refunds/new" element={<RefundForm />} />
+          <Route path="refunds/:id" element={<RefundDetailsPage />} />
         </Route>
         <Route path="/inverter" element={<InverterDashboard />} />
 

@@ -1,17 +1,23 @@
-import type { Invoice } from "@/lib/imsService"
 import { cn } from "@/lib/utils"
-
-function AnalyticsCards({ invoices }: { invoices: Invoice[] }) {
+interface AnalyticsItems {
+  status: string,
+  amount: number
+}
+interface AnalyticsCardsProps {
+  items: AnalyticsItems[],
+  label: string
+}
+function AnalyticsCards({ items, label }: AnalyticsCardsProps) {
   const stats = {
-    total: invoices.length,
-    pending: invoices.filter(i => i.status.startsWith("Pending")).length,
-    approved: invoices.filter(i => i.status === "Approved" || i.status === "Processing").length,
-    paid: invoices.filter(i => i.status === "Paid").length,
-    rejected: invoices.filter(i => i.status === "Rejected").length,
-    totalAmount: invoices.reduce((s, i) => s + i.amount, 0),
+    total: items.length,
+    pending: items.filter(i => i.status.startsWith("Pending")).length,
+    approved: items.filter(i => i.status === "Approved" || i.status === "Processing").length,
+    paid: items.filter(i => i.status === "Paid").length,
+    rejected: items.filter(i => i.status === "Rejected").length,
+    totalAmount: items.reduce((s, i) => s + i.amount, 0),
   }
   const cards = [
-    { label: "Total Invoices", value: stats.total, sub: "", color: "text-foreground" },
+    { label: label,  value: stats.total, sub: "", color: "text-foreground" },
     { label: "Pending Approval", value: stats.pending, sub: "", color: "text-yellow-400" },
     { label: "Approved / Processing", value: stats.approved, sub: "", color: "text-green-400" },
     { label: "Paid", value: stats.paid, sub: "", color: "text-emerald-400" },
@@ -30,3 +36,4 @@ function AnalyticsCards({ invoices }: { invoices: Invoice[] }) {
 }
 
 export default AnalyticsCards
+

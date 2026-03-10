@@ -7,6 +7,7 @@ import { useAuth } from "@/context/auth-provider";
 import { toast } from "sonner";
 import { useNavigate } from "react-router";
 import FormatAmount from "../formatAmount";
+import FormHeader from "./formHeader";
 const InvoiceForm = () => {
   const navigate = useNavigate()
   const { currentUser } = useAuth();
@@ -128,23 +129,11 @@ const InvoiceForm = () => {
   }, []);
   return (
     <div className="space-y-6">
-      <div className="flex items-center gap-3">
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={() => navigate("/ims/invoices")}
-          className="text-foreground"
-        >
-          <ArrowLeft className="size-4" />
-        </Button>
-        <div>
-          <h1 className="text-xl font-bold text-foreground">Submit Invoice</h1>
-          <p className="text-sm text-muted-foreground">
-            Fill in the details below to submit for approval
-          </p>
-        </div>
-      </div>
-
+      <FormHeader 
+        title="Invoice" 
+        description="Fill in the details below to submit for approval" 
+        backLink="/ims/invoices" 
+      />
       <div className="rounded-xl border border-border bg-card p-6 space-y-5">
         <h2 className="text-sm font-semibold text-foreground border-b border-border pb-2">
           Invoice Information
@@ -321,7 +310,6 @@ const InvoiceForm = () => {
           className="min-h-20"
         />
 
-        <div>
           <CustomInput
             label="CC Emails (comma-separated, optional)"
             placeholder="e.g. manager@sunking.com, finance@sunking.com"
@@ -329,7 +317,7 @@ const InvoiceForm = () => {
             value={input.ccEmails}
             onChange={handleInputChange}
           />
-        </div>
+      
       </div>
 
       {(!isProcurement && (

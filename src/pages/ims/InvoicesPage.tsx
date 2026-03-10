@@ -1,15 +1,18 @@
 import { useState, useEffect } from "react"
 import { useAuth } from "@/context/auth-provider"
-import { Plus, Search, FileText } from "lucide-react"
+import { Plus } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { cn } from "@/lib/utils"
 import {
   subscribeToMyInvoices, subscribeToAllInvoices,
   type Invoice, 
 } from "@/lib/imsService"
-import AnalyticsCards from "@/components/invoice/analyticsCard"
+import AnalyticsCards from "@/components/ims/analyticsCard"
 import { useNavigate } from "react-router"
-import InvoiceRow from "@/components/invoice/invoiceRow"
+import Filter from "@/components/ims/filter"
+import RequestRow from "@/components/ims/requestRow"
+import FormatAmount from "@/components/formatAmount"
+import FormatDate from "@/components/formatDate"
+import EmptyState from "../../components/ims/emptystate"
 
 
 type FilterTab = "all" | "pending" | "approved" | "paid" | "rejected"
@@ -74,35 +77,15 @@ export default function InvoicesPage() {
         )}
       </div>
 
-      <AnalyticsCards invoices={invoices} />
-
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-        <div className="relative flex-1 max-w-xs">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
-          <input
-            className="w-full pl-9 pr-4 h-9 rounded-lg border border-input bg-background text-sm text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none"
-            placeholder="Search by ID, vendor..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-          />
-        </div>
-        <div className="flex gap-1 border border-border rounded-lg p-1 bg-card">
-          {filterTabs.map((tab) => (
-            <button
-              key={tab.id}
-              onClick={() => setFilterTab(tab.id)}
-              className={cn(
-                "px-3 py-1 text-xs font-medium rounded-md transition-colors",
-                filterTab === tab.id
-                  ? "bg-primary/20 text-primary"
-                  : "text-muted-foreground hover:text-foreground",
-              )}
-            >
-              {tab.label}
-            </button>
-          ))}
-        </div>
-      </div>
+      <AnalyticsCards items={invoices} label="Total Invoices" />
+      <Filter
+        search={search}
+        setSearch={setSearch}
+        filterTab={filterTab}
+        setFilterTab={setFilterTab}
+        filterTabs={filterTabs}
+        placeholder="Search by ID, vendor..."
+      />
 
       {/* List */}
       <div className="space-y-2">
@@ -114,22 +97,27 @@ export default function InvoicesPage() {
             />
           ))
         ) : filtered.length === 0 ? (
-          <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-border bg-card py-16 text-center">
-            <FileText className="size-10 text-muted-foreground" />
-            <p className="mt-3 text-sm font-medium text-foreground">
-              No invoices found
-            </p>
-            <p className="mt-1 text-xs text-muted-foreground">
-              {can("ims_submit_invoice")
+          <EmptyState
+            title="No invoices found"
+            description={
+              can("ims_submit_invoice")
                 ? "Submit your first invoice to get started."
-                : "No invoices match your filters."}
-            </p>
-          </div>
+                : "No invoices match your filters."
+            }
+          />
         ) : (
           filtered.map((inv) => (
-            <InvoiceRow
+            <RequestRow
               key={inv.id}
-              invoice={inv}
+              title={inv.vendor}
+              id={inv.requestId}
+              meta={[
+                inv.department,
+                FormatAmount(inv.amount, inv.currency),
+                inv.country,
+                FormatDate(inv.createdAt).toLocaleDateString(),
+              ]}
+              status={inv.status}
               onClick={() => navigate(`/ims/invoices/${inv.id}`)}
             />
           ))

@@ -12,6 +12,7 @@ interface InputProps {
     className?: string;
     required?: boolean;
     optional?: boolean;
+    maxLength?: number;
 }
 
 const CustomInput = (props: InputProps) => {
@@ -46,6 +47,7 @@ const CustomInput = (props: InputProps) => {
             value={props.value}
             onChange={props.onChange}
             onFocus={props.onFocus}
+            maxLength={props.maxLength}
   onBlur={props.onBlur}
             className={`w-full rounded-lg border border-input bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-ring/20 ${props.className}`}
         />
