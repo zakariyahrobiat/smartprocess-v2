@@ -4,6 +4,15 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
+  /* ── Sun King brand utility colors ─────────────────────────── */
+  --color-sk-orange:        #F47B20;
+  --color-sk-orange-hover:  #d96a18;
+  --color-sk-teal:          #2ea0b3;
+  --color-sk-teal-hover:    #267f8e;
+  --color-sk-teal-light:    #42bfd2;
+  --color-sk-gold:          #FDC300;
+  --color-sk-navy:          #1D3461;
+
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -77,55 +86,71 @@
   --chart-4:                oklch(0.65 0.16 300);
   --chart-5:                oklch(0.62 0.19 27);
 
-  --sidebar:                oklch(0.98 0.002 264);
-  --sidebar-foreground:     oklch(0.18 0.01 264);
-  --sidebar-primary:        oklch(0.84 0.17 89);
-  --sidebar-primary-foreground: oklch(0.12 0 0);
-  --sidebar-accent:         oklch(0.92 0.006 264);
-  --sidebar-accent-foreground: oklch(0.25 0.01 264);
-  --sidebar-border:         oklch(0.88 0.006 264);
-  --sidebar-ring:           oklch(0.84 0.17 89);
+  /* ── Sun King brand tokens ─────────────────────────────────────── */
+  --sk-orange:              oklch(0.68 0.18 43);     /* #F47B20 */
+  --sk-teal:                oklch(0.73 0.09 207);    /* #42bfd2 */
+  --sk-teal-dark:           oklch(0.63 0.09 207);    /* #2ea0b3 */
+  --sk-gold:                oklch(0.84 0.17 89);     /* #FDC300 */
+  --sk-navy:                oklch(0.28 0.06 252);    /* #1D3461 */
+
+  /* ── Sidebar — Sun King Teal #2ea0b3 ───────────────────────────── */
+  --sidebar:                oklch(0.63 0.09 207);
+  --sidebar-foreground:     oklch(1 0 0);
+  --sidebar-primary:        oklch(1 0 0 / 0.25);
+  --sidebar-primary-foreground: oklch(1 0 0);
+  --sidebar-accent:         oklch(0.54 0.09 207);
+  --sidebar-accent-foreground: oklch(1 0 0);
+  --sidebar-border:         oklch(1 0 0 / 0.15);
+  --sidebar-ring:           oklch(1 0 0 / 0.3);
 }
 
 .dark {
-  /* ── Dark mode — Sun King brand-derived ──────────────
-     Base: deep forest green from #00A651 (Sun King Green), lightened for visibility
-     Surfaces step up in green luminance
-     Yellow (#F9D926) strictly for CTAs and logo only
-     Reduced chroma for greyer tones */
-  --background: oklch(0.25 0.015 152);
-  --foreground: oklch(0.93 0.008 152);
-  --card: oklch(0.28 0.015 152);
-  --card-foreground: oklch(0.93 0.008 152);
-  --popover: oklch(0.28 0.015 152);
-  --popover-foreground: oklch(0.93 0.008 152);
-  /* Primary = Sun King yellow — CTAs and logo ONLY */
-  --primary: oklch(0.88 0.18 96);
-  --primary-foreground: oklch(0.12 0 0);
-  /* Secondary = muted green surface, greyer */
-  --secondary: oklch(0.30 0.010 152);
-  --secondary-foreground: oklch(0.88 0.008 152);
-  --muted: oklch(0.32 0.010 0); /* Neutral grey for views */
-  --muted-foreground: oklch(0.60 0.010 152);
-  --accent: oklch(0.34 0.018 152);
-  --accent-foreground: oklch(0.88 0.008 152);
-  --destructive: oklch(0.62 0.22 27);
-  --border: oklch(0.35 0.010 152);
-  --input: oklch(0.35 0.010 152);
-  --ring: oklch(0.88 0.18 96);
-  --chart-1: oklch(0.88 0.18 96);
-  --chart-2: oklch(0.65 0.18 152);
-  --chart-3: oklch(0.55 0.18 240);
-  --chart-4: oklch(0.65 0.16 300);
-  --chart-5: oklch(0.62 0.19 27);
-  --sidebar: oklch(0.24 0.015 152);
-  --sidebar-foreground: oklch(0.91 0.008 152);
-  --sidebar-primary: oklch(0.88 0.18 96);
-  --sidebar-primary-foreground: oklch(0.12 0 0);
-  --sidebar-accent: oklch(0.30 0.010 152);
-  --sidebar-accent-foreground: oklch(0.88 0.008 152);
-  --sidebar-border: oklch(0.32 0.010 152);
-  --sidebar-ring: oklch(0.88 0.18 96);
+  /* ── Dark mode — Neutral slate, SK brand accents ─────────────────────────
+     Clean near-black slate base — no green tint.
+     Teal sidebar stays consistent across light + dark.
+     SK orange + teal remain vivid as accents.
+     Surfaces: background → card → popover step up in lightness.  */
+
+  --background:           oklch(0.13 0.005 264);   /* #0f1117 near-black slate   */
+  --foreground:           oklch(0.93 0.005 264);   /* near-white text            */
+  --card:                 oklch(0.17 0.005 264);   /* #1a1d24 card surface       */
+  --card-foreground:      oklch(0.93 0.005 264);
+  --popover:              oklch(0.17 0.005 264);
+  --popover-foreground:   oklch(0.93 0.005 264);
+
+  /* Primary = SK gold (used in stepper, ring) */
+  --primary:              oklch(0.84 0.17 89);     /* #FDC300 gold               */
+  --primary-foreground:   oklch(0.12 0 0);
+
+  --secondary:            oklch(0.21 0.005 264);   /* subtle raised surface      */
+  --secondary-foreground: oklch(0.88 0.005 264);
+
+  --muted:                oklch(0.22 0.005 264);
+  --muted-foreground:     oklch(0.56 0.008 264);
+
+  --accent:               oklch(0.24 0.006 264);
+  --accent-foreground:    oklch(0.88 0.005 264);
+
+  --destructive:          oklch(0.62 0.22 27);     /* red — unchanged            */
+  --border:               oklch(0.28 0.007 264);   /* subtle border              */
+  --input:                oklch(0.28 0.007 264);
+  --ring:                 oklch(0.63 0.09 207);    /* SK teal focus ring         */
+
+  --chart-1:              oklch(0.84 0.17 89);
+  --chart-2:              oklch(0.63 0.09 207);
+  --chart-3:              oklch(0.68 0.18 43);
+  --chart-4:              oklch(0.65 0.16 300);
+  --chart-5:              oklch(0.62 0.19 27);
+
+  /* ── Sidebar stays SK teal in dark mode too ──────────────────────────── */
+  --sidebar:                oklch(0.54 0.09 207);  /* slightly darker teal       */
+  --sidebar-foreground:     oklch(1 0 0);
+  --sidebar-primary:        oklch(1 0 0 / 0.25);
+  --sidebar-primary-foreground: oklch(1 0 0);
+  --sidebar-accent:         oklch(0.45 0.09 207);
+  --sidebar-accent-foreground: oklch(1 0 0);
+  --sidebar-border:         oklch(1 0 0 / 0.12);
+  --sidebar-ring:           oklch(1 0 0 / 0.3);
 }
 
 @layer base {

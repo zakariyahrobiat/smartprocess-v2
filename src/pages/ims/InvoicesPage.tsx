@@ -70,7 +70,7 @@ export default function InvoicesPage() {
         {can("ims_submit_invoice") && (
           <Button
             onClick={() => navigate("/ims/invoices/new")}
-            className="gap-2 bg-green-600 hover:bg-green-700 text-white"
+            className="gap-2 bg-sk-orange hover:bg-sk-orange-hover text-white"
           >
             <Plus className="size-4" /> Submit Invoice
           </Button>

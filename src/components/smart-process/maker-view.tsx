@@ -4,7 +4,7 @@ import { processFlows, stepLabels } from "@/lib/store"
 import { submitRequest } from "@/lib/submissionService"
 import { useAuth } from "@/context/auth-provider"
 import { ProcessCard } from "./process-card"
-import { Stepper } from "./stepper"
+import { Stepper } from "@/components/shared/stepper"
 import { ProcessCardSkeleton } from "./skeleton-loaders"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
@@ -303,8 +303,8 @@ export function MakerView() {
 
         {/* Submitted by */}
         {currentUser && (
-          <div className="mt-4 flex items-center gap-2 rounded-lg bg-gray-900/50 border border-gray-800 px-4 py-2.5">
-            <div className="w-6 h-6 rounded-full bg-green-700 flex items-center justify-center text-white text-[10px] font-bold">
+          <div className="mt-4 flex items-center gap-2 rounded-lg bg-muted border border-border px-4 py-2.5">
+            <div className="w-6 h-6 rounded-full bg-sk-teal flex items-center justify-center text-white text-[10px] font-bold">
               {currentUser.displayName?.charAt(0) ?? "?"}
             </div>
             <span className="text-xs text-gray-400">

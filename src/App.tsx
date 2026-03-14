@@ -6,17 +6,18 @@ import { AppShell } from './components/smart-process/app-shell'
 import IMSPage from './pages/ims/IMSPage'
 import { InverterDashboard } from './pages/inverter/inverter-dashboard'
 import { MakerView } from './components/smart-process/maker-view'
+import DashboardPage from './pages/DashboardPage'
+import PendingActionsPage from './pages/PendingActionsPage'
+import HistoryPage from './pages/HistoryPage'
 import { SubmissionsList } from './components/smart-process/submissions-list'
 import { CheckerView } from './components/smart-process/checker-view'
-import RolesPage from './pages/admin/RolesPage'
+import RolesPage from './pages/admin/roles/RolesPage'
 import UsersPage from './pages/admin/UsersPage'
 import AssistantPortal from './components/shop-assistant/AssistantPortal'
 import HRPortal from './components/shop-assistant/HRPortal'
 import SupervisorPortal from './components/shop-assistant/SupervisorPortal'
 import PermissionGuard from './components/permissionGuard'
-import InvoicesPage from './pages/ims/InvoicesPage'
 import InvoiceForm from './components/inputs/invoiceForm'
-import RefundsPage from './pages/ims/RefundsPage'
 import InvoiceDetailPage from './pages/ims/invoiceDetailsPage'
 import RefundForm from './components/inputs/refundForm'
 import RefundDetailsPage from './pages/ims/refundDetailsPage'
@@ -26,8 +27,8 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-screen bg-gray-950">
-        <div className="w-8 h-8 border-4 border-green-500 border-t-transparent rounded-full animate-spin" />
+      <div className="flex items-center justify-center h-screen bg-background">
+        <div className="w-8 h-8 border-4 border-sk-teal border-t-transparent rounded-full animate-spin" />
       </div>
     )
   }
@@ -49,27 +50,12 @@ export default function App() {
           </ProtectedRoute>
         }
       >
-        <Route path="/" element={<MakerView />} />
-        <Route
-          path="/submissions"
-          element={
-            <SubmissionsList
-              title="My Submissions"
-              description="Track the status of all your submitted requests."
-            />
-          }
-        />
-        <Route path="/pending" element={<CheckerView />} />
-        <Route
-          path="/history"
-          element={
-            <SubmissionsList
-              title="History"
-              description="Browse completed and archived submissions."
-              filter="approved"
-            />
-          }
-        />
+        <Route path="/" element={<DashboardPage />} />
+        <Route path="/new" element={<MakerView />} />
+
+        <Route path="/pending" element={<PendingActionsPage />} />
+        <Route path="/history" element={<HistoryPage />} />
+        {/* IMS master-detail — self-contained, no Outlet */}
         <Route
           path="/ims"
           element={
@@ -77,15 +63,29 @@ export default function App() {
               <IMSPage />
             </PermissionGuard>
           }
-        >
-          <Route index element={<InvoicesPage />} />
-          <Route path="invoices" element={<InvoicesPage />} />
-          <Route path="invoices/new" element={<InvoiceForm />} />
-          <Route path="invoices/:id" element={<InvoiceDetailPage />} />
-          <Route path="refunds" element={<RefundsPage />} />
-          <Route path="refunds/new" element={<RefundForm />} />
-          <Route path="refunds/:id" element={<RefundDetailsPage />} />
-        </Route>
+        />
+
+        {/* IMS forms — rendered at AppShell level with scrollable wrapper */}
+        <Route path="/ims/invoices/new" element={
+          <div className="flex-1 overflow-y-auto p-4 lg:p-8">
+            <PermissionGuard permission="ims_submit_invoice"><InvoiceForm /></PermissionGuard>
+          </div>
+        } />
+        <Route path="/ims/invoices/:id" element={
+          <div className="flex-1 overflow-y-auto p-4 lg:p-8">
+            <InvoiceDetailPage />
+          </div>
+        } />
+        <Route path="/ims/refunds/new" element={
+          <div className="flex-1 overflow-y-auto p-4 lg:p-8">
+            <PermissionGuard permission="ims_submit_refund"><RefundForm /></PermissionGuard>
+          </div>
+        } />
+        <Route path="/ims/refunds/:id" element={
+          <div className="flex-1 overflow-y-auto p-4 lg:p-8">
+            <RefundDetailsPage />
+          </div>
+        } />
         <Route path="/inverter" element={<InverterDashboard />} />
 
         <Route

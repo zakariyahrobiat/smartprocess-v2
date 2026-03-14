@@ -55,11 +55,13 @@ const InvoiceForm = () => {
       m.map((mgr, idx) => (idx === i ? { ...mgr, [field]: val } : mgr)),
     );
 
-    useEffect(() => {
-      if (input.location) {
-        setInput((f) => ({ ...f, currency: CURRENCY_BY_COUNTRY[input.location as IMSCountry] }))
-      }
-    }, [input.location])
+  // Auto-suggest currency when country changes, but only if user hasn't manually overridden
+  const [currencyOverridden, setCurrencyOverridden] = useState(false)
+  useEffect(() => {
+    if (input.location && !currencyOverridden) {
+      setInput((f) => ({ ...f, currency: CURRENCY_BY_COUNTRY[input.location as IMSCountry] ?? f.currency }))
+    }
+  }, [input.location])
 
   const handleSubmit = async () => {
     if (
@@ -92,7 +94,7 @@ const InvoiceForm = () => {
         currentUser.displayName,
       );
     toast.success("Invoice submitted successfully!");
-    navigate("/ims/invoices");
+    navigate("/ims");
     } catch (e) {
       toast.error(e instanceof Error ? e.message : "Submission failed");
     } finally {
@@ -132,7 +134,7 @@ const InvoiceForm = () => {
       <FormHeader 
         title="Invoice" 
         description="Fill in the details below to submit for approval" 
-        backLink="/ims/invoices" 
+        backLink="/ims" 
       />
       <div className="rounded-xl border border-border bg-card p-6 space-y-5">
         <h2 className="text-sm font-semibold text-foreground border-b border-border pb-2">
@@ -260,7 +262,7 @@ const InvoiceForm = () => {
             placeholder="Select currency..."
             name="currency"
             value={input.currency}
-            onChange={handleInputChange}
+            onChange={(e) => { setCurrencyOverridden(true); handleInputChange(e) }}
             option={IMS_CURRENCIES.map((currency) => ({
               label: currency,
               value: currency,
@@ -378,8 +380,8 @@ const InvoiceForm = () => {
           ))}
         </div>
       )) || (
-        <div className="rounded-xl border border-blue-800 bg-blue-900/20 p-4 flex items-start gap-3">
-          <AlertCircle className="size-4 text-blue-400 mt-0.5 shrink-0" />
+        <div className="rounded-xl border border-sk-teal/30 bg-sk-teal/10 p-4 flex items-start gap-3">
+          <AlertCircle className="size-4 text-sk-teal mt-0.5 shrink-0" />
           <p className="text-sm text-blue-300">
             <span className="font-medium">Operation & Procurement</span> — this
             request goes directly to Finance, skipping Line Manager approval.
@@ -388,13 +390,13 @@ const InvoiceForm = () => {
       )}
 
       <div className="flex gap-3 justify-end">
-        <Button variant="outline" onClick={() => navigate("/ims/invoices")}>
+        <Button variant="outline" onClick={() => navigate("/ims")}>
           Cancel
         </Button>
         <Button
           onClick={handleSubmit}
           disabled={isSubmitting}
-          className="gap-2 bg-green-600 hover:bg-green-700 text-white min-w-36"
+          className="gap-2 bg-sk-orange hover:bg-sk-orange-hover text-white min-w-36"
         >
           {isSubmitting ? (
             <>

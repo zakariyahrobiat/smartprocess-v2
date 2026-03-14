@@ -32,9 +32,12 @@ function RefundForm() {
     setForm((form) => ({ ...form, [name]: value }));
   };
 
+  const [currencyOverridden, setCurrencyOverridden] = useState(false)
   useEffect(() => {
-    setForm((f) => ({ ...f, currency: CURRENCY_BY_COUNTRY[f.country] }));
-  }, [form.country]);
+    if (!currencyOverridden) {
+      setForm((f) => ({ ...f, currency: CURRENCY_BY_COUNTRY[f.country] ?? f.currency }))
+    }
+  }, [form.country])
 
   const validateAccount = (val: string) => {
     if (val && !/^\d{10}$/.test(val)) {
@@ -70,7 +73,7 @@ function RefundForm() {
         currentUser.displayName,
       );
       toast.success("Refund request submitted successfully!");
-      navigate("/ims/refunds");
+      navigate("/ims");
     } catch (e) {
       toast.error(e instanceof Error ? e.message : "Submission failed");
     } finally {
@@ -84,7 +87,7 @@ function RefundForm() {
       <FormHeader
         title="Refund Request"
         description="Customer refund details"
-        backLink="/ims/refunds"
+        backLink="/ims"
       />
       <div className="rounded-xl border border-border bg-card p-6 space-y-5">
         <h2 className="text-sm font-semibold text-foreground border-b border-border pb-2">
@@ -104,7 +107,7 @@ function RefundForm() {
             variant="select"
             label="Country"
             required
-            name="location"
+            name="country"
             value={form.country}
             onChange={handleFormChange}
             option={IMS_COUNTRIES.map((item) => ({ label: item, value: item }))}
@@ -138,7 +141,7 @@ function RefundForm() {
             {form.accountNumber &&
               !accountError &&
               form.accountNumber.length === 10 && (
-                <p className="text-xs text-green-400 mt-1">
+                <p className="text-xs text-sk-teal mt-1">
                   ✓ Valid account number
                 </p>
               )}
@@ -163,7 +166,7 @@ function RefundForm() {
             placeholder="Select currency..."
             name="currency"
             value={form.currency}
-            onChange={handleFormChange}
+            onChange={(e) => { setCurrencyOverridden(true); handleFormChange(e) }}
             option={IMS_CURRENCIES.map((currency) => ({
               label: currency,
               value: currency,
@@ -192,7 +195,7 @@ function RefundForm() {
           label="Reason for Refund"
           required
           placeholder="Explain why this refund is being requested..."
-          name="description"
+          name="reason"
           value={form.reason}
           onChange={handleFormChange}
           className="min-h-20"
@@ -200,13 +203,13 @@ function RefundForm() {
       </div>
 
       <div className="flex gap-3 justify-end">
-        <Button variant="outline" onClick={() => navigate("/ims/refunds")}>
+        <Button variant="outline" onClick={() => navigate("/ims")}>
           Cancel
         </Button>
         <Button
           onClick={handleSubmit}
           disabled={isSubmitting}
-          className="gap-2 bg-cyan-600 hover:bg-cyan-700 text-white min-w-40"
+          className="gap-2 bg-sk-teal hover:bg-sk-teal-hover text-white min-w-40"
         >
           {isSubmitting ? (
             <>

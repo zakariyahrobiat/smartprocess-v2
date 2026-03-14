@@ -1,9 +1,9 @@
-import { ClipboardCheck, Clock, FileText, Fingerprint, Receipt, Shield, ShieldCheck, UserCog, Users, Zap } from "lucide-react";
+import { ClipboardCheck, Clock, Fingerprint, LayoutDashboard, Receipt, Shield, ShieldCheck, UserCog, Users, Zap } from "lucide-react";
 
 export const coreNavItems = [
-  { id: "my-submissions", label: "My Submissions", icon: FileText, link: "/submissions" },
-  { id: "pending-actions", label: "Pending Actions", icon: ClipboardCheck, link: "/pending" },
-  { id: "history", label: "History", icon: Clock, link: "/history" },
+  { id: "dashboard",       label: "Dashboard",       icon: LayoutDashboard, link: "/" },
+  { id: "pending-actions", label: "Pending Actions", icon: ClipboardCheck,  link: "/pending" },
+  { id: "history",         label: "History",         icon: Clock,           link: "/history" },
 ]
 
 export const projectItems =  [

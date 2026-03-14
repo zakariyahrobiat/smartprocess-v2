@@ -6,7 +6,7 @@ import {
   Timestamp,
 } from "firebase/firestore"
 import { db } from "./firebase"
-import type { Refund, RefundFormData } from "./imsTypes"
+import type { RefundFormData } from "./imsTypes"
 
 // ─── Types ────────────────────────────────────────────────────────────
 
@@ -163,6 +163,7 @@ export async function submitRefundToFirestore(
   const refund: Omit<Refund, "id"> = {
     referenceNumber: data.referenceNumber,
     submitterEmail,
+    submitterName: data.customerName,
     customerName: data.customerName,
     submissionDate: Timestamp.now(),
     country: data.country,
@@ -173,11 +174,6 @@ export async function submitRefundToFirestore(
     ccEmails: data.ccEmails,
     status: "Pending Receivable Approval",
     reason: data.reason,
-    history: [{
-      timestamp: Timestamp.now(),
-      action: "Submitted",
-      userEmail: submitterEmail,
-    }],
   };
   const ref = await addDoc(collection(db, "refunds"), refund);
   return ref.id;
