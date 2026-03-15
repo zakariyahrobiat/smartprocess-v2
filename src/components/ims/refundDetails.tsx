@@ -1,6 +1,6 @@
 import FormatAmount from "@/components/formatAmount"
 import { Button } from "@/components/ui/button"
-import { updateRefundStatus, type Refund, type RefundStatus } from "@/lib/imsService"
+import {  type RefundStatus } from "@/lib/imsService"
 import { AlertCircle,  Building2, CheckCircle2, DollarSign, FileText, Loader2, User, XCircle } from "lucide-react"
 import { useState } from "react"
 import { toast } from "sonner"
@@ -9,6 +9,7 @@ import DetailHeader from "@/components/ims/detailsHeader"
 import FormatDate from "@/components/formatDate"
 import DetailCard from "./detailsCard"
 import { RefundStepper } from "./RefundWorkFlow"
+import type { Refund } from "@/lib/imsTypes"
 
 
 function RefundDetail({
@@ -34,10 +35,10 @@ function RefundDetail({
     setIsActing(true)
     try {
       const newStatus: RefundStatus = showApproveReceivable ? "Pending Approval" : "Approved"
-      await updateRefundStatus(refund.id, {
-        status: newStatus,
-        ...(showApproveReceivable ? { receivableApprovalDate: Timestamp.now() } : { approvalDate: Timestamp.now() }),
-      })
+      // await updateRefundStatus(refund.id, {
+      //   status: newStatus,
+      //   ...(showApproveReceivable ? { receivableApprovalDate: Timestamp.now() } : { approvalDate: Timestamp.now() }),
+      // })
       toast.success(`Refund ${showApproveReceivable ? "forwarded for final approval" : "approved"}`)
       onBack()
     } catch {
@@ -52,7 +53,7 @@ function RefundDetail({
     if (!refund.id) return
     setIsActing(true)
     try {
-      await updateRefundStatus(refund.id, { status: "Rejected", rejectionReason: comment })
+      // await updateRefundStatus(refund.id, { status: "Rejected", rejectionReason: comment })
       toast.success("Refund rejected")
       onBack()
     } catch {
@@ -66,7 +67,7 @@ function RefundDetail({
     if (!refund.id) return
     setIsActing(true)
     try {
-      await updateRefundStatus(refund.id, { status: "Paid" })
+      // await updateRefundStatus(refund.id, { status: "Paid" })
       toast.success("Refund marked as paid")
       onBack()
     } catch {

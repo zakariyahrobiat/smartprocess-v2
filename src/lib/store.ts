@@ -8,6 +8,7 @@ export interface ProcessFlow {
   description: string
   icon: string
   category: string
+  link: string
 }
 
 export interface Submission {
@@ -43,6 +44,7 @@ export const processFlows: ProcessFlow[] = [
     description: "Submit a request for new computing hardware with specs and justification.",
     icon: "laptop",
     category: "IT",
+    link: '/request/laptop'
   },
   {
     id: "travel",
@@ -50,6 +52,7 @@ export const processFlows: ProcessFlow[] = [
     description: "Claim reimbursement for business travel expenses with receipts.",
     icon: "plane",
     category: "Finance",
+    link: '/request/travel'
   },
   {
     id: "leave",
@@ -57,6 +60,7 @@ export const processFlows: ProcessFlow[] = [
     description: "Apply for annual, sick, or personal leave with manager approval.",
     icon: "calendar",
     category: "HR",
+    link: '/request/leave'
   },
   {
     id: "software",
@@ -64,6 +68,7 @@ export const processFlows: ProcessFlow[] = [
     description: "Request new software licenses or renewals for team tools.",
     icon: "box",
     category: "IT",
+    link: '/request/software'
   },
   {
     id: "vendor",
@@ -71,6 +76,7 @@ export const processFlows: ProcessFlow[] = [
     description: "Initiate a new vendor registration with compliance checks.",
     icon: "users",
     category: "Procurement",
+    link: '/request/vendor'
   },
   {
     id: "budget",
@@ -78,6 +84,7 @@ export const processFlows: ProcessFlow[] = [
     description: "Submit budget proposals for departmental spending approval.",
     icon: "wallet",
     category: "Finance",
+    link: '/request/budget'
   },
 ]
 

@@ -1,4 +1,4 @@
-import { AMOUNT_THRESHOLDS, updateInvoiceStatus,  type Invoice } from "@/lib/imsService";
+import { AMOUNT_THRESHOLDS,  type Invoice } from "@/lib/imsService";
 import { AlertCircle, ArrowLeft, Building2, CheckCircle2, DollarSign, FileText, Loader2, User, XCircle } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -64,11 +64,11 @@ function InvoiceDetail({
         newStatus = "Approved";
       }
 
-      await updateInvoiceStatus(invoice.id, {
-        status: newStatus,
-        approvalIndex: newIndex,
-        ...(newStatus === "Approved" ? { approvalDate: new Date() } : {}),
-      });
+      // await updateInvoiceStatus(invoice.id, {
+      //   status: newStatus,
+      //   approvalIndex: newIndex,
+      //   ...(newStatus === "Approved" ? { approvalDate: new Date() } : {}),
+      // });
       toast.success("Invoice approved", {
         description: `New status: ${newStatus}`,
       });
@@ -88,10 +88,10 @@ function InvoiceDetail({
     if (!invoice.id) return;
     setIsActing(true);
     try {
-      await updateInvoiceStatus(invoice.id, {
-        status: "Rejected",
-        rejectionReason: comment,
-      });
+      // await updateInvoiceStatus(invoice.id, {
+      //   status: "Rejected",
+      //   rejectionReason: comment,
+      // });
       toast.success("Invoice rejected");
       onBack();
     } catch {
@@ -105,7 +105,7 @@ function InvoiceDetail({
     if (!invoice.id) return;
     setIsActing(true);
     try {
-      await updateInvoiceStatus(invoice.id, { status: "Paid" });
+      // await updateInvoiceStatus(invoice.id, { status: "Paid" });
       toast.success("Invoice marked as paid");
       onBack();
     } catch {
@@ -179,7 +179,7 @@ function InvoiceDetail({
             <h2 className="text-sm font-semibold text-foreground mb-3">
               Approval Chain
             </h2>
-            <div className="space-y-2">
+            {/* <div className="space-y-2">
               {invoice.managers.map((m, i) => (
                 <div
                   key={i}
@@ -211,7 +211,7 @@ function InvoiceDetail({
                   </div>
                 </div>
               ))}
-            </div>
+            </div> */}
           </div>
 
           {/* Attachments */}

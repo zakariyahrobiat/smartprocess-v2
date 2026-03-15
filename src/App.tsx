@@ -20,6 +20,7 @@ import RefundsPage from './pages/ims/RefundsPage'
 import InvoiceDetailPage from './pages/ims/invoiceDetailsPage'
 import RefundForm from './components/inputs/refundForm'
 import RefundDetailsPage from './pages/ims/refundDetailsPage'
+import LaptopRequest from './components/requests/laptopRequest'
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { currentUser, loading } = useAuth()
@@ -50,6 +51,7 @@ export default function App() {
         }
       >
         <Route path="/" element={<MakerView />} />
+        <Route path='/request/laptop' element={<LaptopRequest/>} />
         <Route
           path="/submissions"
           element={

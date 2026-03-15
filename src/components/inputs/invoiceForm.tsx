@@ -1,6 +1,6 @@
 import { AlertCircle, ArrowLeft, Loader2, Plus, Upload, X } from "lucide-react";
 import CustomInput from "./customInput";
-import { AMOUNT_THRESHOLDS, CURRENCY_BY_COUNTRY, DEPARTMENTS, getCostCenters, getVendors, IMS_COUNTRIES, IMS_CURRENCIES, submitInvoice, type CostCenter, type IMSCountry, type InvoiceFormData, type Manager, type Vendor } from "@/lib/imsService";
+import { AMOUNT_THRESHOLDS, CURRENCY_BY_COUNTRY, DEPARTMENTS,  IMS_COUNTRIES, IMS_CURRENCIES, type CostCenter, type IMSCountry, type InvoiceFormData, type Manager } from "@/lib/imsService";
 import { Button } from "../ui/button";
 import { useEffect, useState } from "react";
 import { useAuth } from "@/context/auth-provider";
@@ -8,6 +8,8 @@ import { toast } from "sonner";
 import { useNavigate } from "react-router";
 import FormatAmount from "../formatAmount";
 import FormHeader from "./formHeader";
+import { createInvoice, getVendors } from "@/services/ims.service";
+import type { Vendor } from "@/types/ims.types";
 const InvoiceForm = () => {
   const navigate = useNavigate()
   const { currentUser } = useAuth();
@@ -29,7 +31,7 @@ const InvoiceForm = () => {
     poNumber: "",
     description: "",
     ccEmails: "",
-    location: "Nigeria",
+    location: "",
     managers: [],
     fileUrls: [],
   });
@@ -58,6 +60,12 @@ const InvoiceForm = () => {
     useEffect(() => {
       if (input.location) {
         setInput((f) => ({ ...f, currency: CURRENCY_BY_COUNTRY[input.location as IMSCountry] }))
+      
+    const fetchVendor = async () => {
+      const vendorData = await getVendors({ country: input.location });
+      setVendors(vendorData);
+    };
+    fetchVendor();
       }
     }, [input.location])
 
@@ -70,7 +78,7 @@ const InvoiceForm = () => {
       !input.amount ||
       !input.location ||
       !input.currency ||
-      !input.description
+      !input.description || (managers.length === 0 && !isProcurement)
     ) {
       toast.error("Please fill in all required fields");
       return;
@@ -83,19 +91,27 @@ const InvoiceForm = () => {
 
     setIsSubmitting(true);
     try {
-      await submitInvoice(
-        {
-          ...input,
-          managers: isProcurement ? [] : managers,
-        } as InvoiceFormData,
-        currentUser.email,
-        currentUser.displayName,
-      );
+        await createInvoice({
+          invoiceNumber: input.invoiceNo,
+          lineManagerName: managers.map((m) => m.name).join(", "),
+          lineManagerEmail: managers.map((m) => m.email).join(", "),
+          department: input.department,
+          costCenter: input.costCenter,
+          vendor: input.vendor,
+          amount: input.amount,
+          poNumber: input.poNumber || "",
+          description: input.description,
+          cc: input.ccEmails,
+          country: input.location,
+          currency: input.currency,
+          attachmentLinks: input.fileUrls,
+        });
     toast.success("Invoice submitted successfully!");
     navigate("/ims/invoices");
-    } catch (e) {
-      toast.error(e instanceof Error ? e.message : "Submission failed");
-    } finally {
+    } catch (e: any) {
+  console.log(e.response?.data);
+  toast.error(e.response?.data?.message || "Submission failed");
+}finally {
       setIsSubmitting(false);
     }
   };
@@ -119,20 +135,17 @@ const InvoiceForm = () => {
           )
           .slice(0, 8)
       : [];
-  useEffect(() => {
-    getVendors()
-      .then(setVendors)
-      .catch(() => {});
-    getCostCenters()
-      .then(setCostCenters)
-      .catch(() => {});
-  }, []);
+  // useEffect(() => {
+  //   getCostCenters()
+  //     .then(setCostCenters)
+  //     .catch(() => {});
+  // }, []);
   return (
     <div className="space-y-6">
-      <FormHeader 
-        title="Invoice" 
-        description="Fill in the details below to submit for approval" 
-        backLink="/ims/invoices" 
+      <FormHeader
+        title="Invoice"
+        description="Fill in the details below to submit for approval"
+        backLink="/ims/invoices"
       />
       <div className="rounded-xl border border-border bg-card p-6 space-y-5">
         <h2 className="text-sm font-semibold text-foreground border-b border-border pb-2">
@@ -140,6 +153,15 @@ const InvoiceForm = () => {
         </h2>
 
         <div className="grid gap-4 sm:grid-cols-2">
+          <CustomInput
+            variant="select"
+            label="Country"
+            required
+            name="location"
+            value={input.location}
+            onChange={handleInputChange}
+            option={IMS_COUNTRIES.map((item) => ({ label: item, value: item }))}
+          />
           <CustomInput
             label="Invoice Number"
             required
@@ -170,7 +192,7 @@ const InvoiceForm = () => {
               <ul className="absolute z-50 w-full mt-1 rounded-lg border border-border bg-card shadow-lg max-h-48 overflow-y-auto">
                 {filteredVendors.map((v) => (
                   <li
-                    key={v.id}
+                    key={v.code}
                     className="px-3 py-2.5 cursor-pointer hover:bg-accent text-sm"
                     onMouseDown={() => {
                       setVendorSearch(v.name);
@@ -244,15 +266,13 @@ const InvoiceForm = () => {
           />
 
           <CustomInput
-            variant="select"
-            label="Country"
-            required
-            name="location"
-            value={input.location}
+            label="PO Number"
+            optional
+            placeholder="e.g. PO-2024-001"
+            name="poNumber"
+            value={input.poNumber || ""}
             onChange={handleInputChange}
-            option={IMS_COUNTRIES.map((item) => ({ label: item, value: item }))}
           />
-
           <CustomInput
             label="Currency"
             variant="select"
@@ -289,15 +309,6 @@ const InvoiceForm = () => {
               </p>
             )}
           </div>
-
-          <CustomInput
-            label="PO Number"
-            optional
-            placeholder="e.g. PO-2024-001"
-            name="poNumber"
-            value={input.poNumber || ""}
-            onChange={handleInputChange}
-          />
         </div>
         <CustomInput
           variant="textarea"
@@ -310,14 +321,13 @@ const InvoiceForm = () => {
           className="min-h-20"
         />
 
-          <CustomInput
-            label="CC Emails (comma-separated, optional)"
-            placeholder="e.g. manager@sunking.com, finance@sunking.com"
-            name="ccEmails"
-            value={input.ccEmails}
-            onChange={handleInputChange}
-          />
-      
+        <CustomInput
+          label="CC Emails (comma-separated, optional)"
+          placeholder="e.g. manager@sunking.com, finance@sunking.com"
+          name="ccEmails"
+          value={input.ccEmails}
+          onChange={handleInputChange}
+        />
       </div>
 
       {(!isProcurement && (
