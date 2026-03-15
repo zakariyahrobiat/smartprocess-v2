@@ -53,7 +53,6 @@ interface AuthContextValue {
   updateRolePermission: (roleId: string, perm: Permission, enabled: boolean) => void
   addRole: (role: RoleDefinition) => void
   deleteRole: (roleId: string) => void
-  token: string | null
   }
 
 const AuthContext = createContext<AuthContextValue | null>(null)
@@ -74,13 +73,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [currentUser, setCurrentUser] = useState<AppUser | null>(null)
   const [roles, setRoles] = useState<RoleDefinition[]>(() => [...mockRoles])
   const [loading, setLoading] = useState(true)
-const [token, setToken] = useState<string | null>(localStorage.getItem("token"))
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser: FirebaseUser | null) => {
       if (firebaseUser) {
         const firestoreUser = await syncUserToFirestore(firebaseUser)
-        console.log("Firestore user data:", firestoreUser)
-        const rawRole = (firestoreUser.role ?? "maker").toLowerCase();
+        const rawRole = firestoreUser.role ?? "maker"
         const roleId = ADMIN_EMAILS.includes((firestoreUser.email ?? firebaseUser.email ?? "").toLowerCase())
           ? "administrator"
           : rawRole
@@ -137,13 +135,7 @@ const [token, setToken] = useState<string | null>(localStorage.getItem("token"))
   const signIn = async () => {
     setLoading(true)
     try {
-      const response = await signInWithPopup(auth, googleProvider)
-      const token = await response.user.getIdToken()
-      localStorage.setItem("token", token)
-      setToken(token)
-      console.log(currentUser?.roleId, "signed in with token:", token);
-      
-
+      await signInWithPopup(auth, googleProvider)
     } catch (error) {
       console.error("Sign in error:", error)
       setLoading(false)
@@ -153,7 +145,6 @@ const [token, setToken] = useState<string | null>(localStorage.getItem("token"))
   const signOutUser = async () => {
     await signOut(auth)
     setCurrentUser(null)
-    setToken(null)
   }
 
   const updateRolePermission = useCallback(
@@ -189,9 +180,9 @@ const [token, setToken] = useState<string | null>(localStorage.getItem("token"))
       signOutUser,
       updateRolePermission,
       addRole,
-      deleteRole, token
+      deleteRole, 
     }),
-    [currentUser, currentRole, roles, can, accessibleProjects, accessibleModules, loading, token]
+    [currentUser, currentRole, roles, can, accessibleProjects, accessibleModules, loading]
   )
 
   return <AuthContext value={value}>{children}</AuthContext>

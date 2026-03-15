@@ -1,4 +1,4 @@
-import { Routes, Route, Navigate} from 'react-router-dom'
+import { Routes, Route, Navigate, Outlet } from 'react-router-dom'
 import { useAuth } from './context/auth-provider'
 import SeedPage from "@/pages/ims/SeedPage"
 import LoginPage from './pages/LoginPage'
@@ -21,7 +21,6 @@ import InvoiceForm from './components/inputs/invoiceForm'
 import InvoiceDetailPage from './pages/ims/invoiceDetailsPage'
 import RefundForm from './components/inputs/refundForm'
 import RefundDetailsPage from './pages/ims/refundDetailsPage'
-import LaptopRequest from './components/requests/laptopRequest'
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { currentUser, loading } = useAuth()

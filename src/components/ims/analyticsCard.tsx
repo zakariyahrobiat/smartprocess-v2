@@ -1,50 +1,28 @@
 import { cn } from "@/lib/utils"
-interface InvoiceAnalytics {
-  total: number;
-  pending_line_manager: number;
-  pending_finance: number;
-  pending_senior_manager: number;
-  approved: number;
-  processing: number;
-  paid: number;
-  rejected: number;
+interface AnalyticsItems {
+  status: string,
+  amount: number
 }
-interface refundAnalytics {
-  total: number;
-  pending_receivable: number;
-  pending_approval: number;
-  approved: number;
-  processing: number;
-  paid: number;
-  rejected: number;
-}
-
 interface AnalyticsCardsProps {
-  stats: InvoiceAnalytics | refundAnalytics;
-  label: string;
+  items: AnalyticsItems[],
+  label: string
 }
-function AnalyticsCards({ stats, label }: AnalyticsCardsProps) {
-   const pending =
-    "pending_line_manager" in stats
-      ? stats.pending_line_manager +
-        stats.pending_finance +
-        stats.pending_senior_manager
-      : stats.pending_receivable + stats.pending_approval
-    const cards = [
-     { label: label, value: stats.total, color: "text-foreground" },
-     {
-       label: "Pending Approval",
-       value: pending,
-       color: "text-yellow-400",
-     },
-     {
-       label: "Approved / Processing",
-       value: stats.approved + stats.processing,
-       color: "text-green-400",
-     },
-     { label: "Paid", value: stats.paid, color: "text-emerald-400" },
-     { label: "Rejected", value: stats.rejected, color: "text-red-400" },
-   ];
+function AnalyticsCards({ items, label }: AnalyticsCardsProps) {
+  const stats = {
+    total: items.length,
+    pending: items.filter(i => i.status.startsWith("Pending")).length,
+    approved: items.filter(i => i.status === "Approved" || i.status === "Processing").length,
+    paid: items.filter(i => i.status === "Paid").length,
+    rejected: items.filter(i => i.status === "Rejected").length,
+    totalAmount: items.reduce((s, i) => s + i.amount, 0),
+  }
+  const cards = [
+    { label: label,  value: stats.total, sub: "", color: "text-foreground" },
+    { label: "Pending Approval", value: stats.pending, sub: "", color: "text-yellow-400" },
+    { label: "Approved / Processing", value: stats.approved, sub: "", color: "text-green-400" },
+    { label: "Paid", value: stats.paid, sub: "", color: "text-emerald-400" },
+    { label: "Rejected", value: stats.rejected, sub: "", color: "text-red-400" },
+  ]
   return (
     <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
       {cards.map(c => (
