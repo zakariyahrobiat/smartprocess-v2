@@ -1,6 +1,6 @@
 import RefundDetail from "@/components/ims/refundDetails";
 import { useAuth } from "@/context/auth-provider";
-import type { Refund } from "@/lib/imsTypes";
+import { getRefundById, type Refund } from "@/lib/imsService";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
@@ -21,8 +21,8 @@ const RefundDetailsPage = () => {
 
     const fetchRefund = async () => {
       try {
-        // const data = await getRefundById(id);
-        // setRefund(data);
+        const data = await getRefundById(id);
+        setRefund(data);
       } finally {
         setLoading(false);
       }

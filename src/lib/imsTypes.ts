@@ -135,7 +135,7 @@ export interface Refund {
   receivableApprovalDate?: Timestamp;
   reason: string;
   rejectionReason?: string;
-  history?: RefundHistoryEntry[];
+  history: RefundHistoryEntry[];
 }
 
 // Form data for new refund submission

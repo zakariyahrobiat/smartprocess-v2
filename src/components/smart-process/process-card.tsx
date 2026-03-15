@@ -9,7 +9,6 @@ import {
   Wallet,
 } from "lucide-react"
 import type { ProcessFlow } from "@/lib/store"
-import { Link } from "react-router-dom"
 
 const iconMap: Record<string, typeof Laptop> = {
   laptop: Laptop,
@@ -22,14 +21,15 @@ const iconMap: Record<string, typeof Laptop> = {
 
 interface ProcessCardProps {
   process: ProcessFlow
+  onSelect: (id: string) => void
 }
 
-export function ProcessCard({ process }: ProcessCardProps) {
+export function ProcessCard({ process, onSelect }: ProcessCardProps) {
   const Icon = iconMap[process.icon] || Package
 
   return (
-    <Link to={process.link}>
     <button
+      onClick={() => onSelect(process.id)}
       className={cn(
         "group relative flex flex-col items-start gap-3 rounded-xl border border-border bg-card p-5 text-left transition-all duration-200",
         "hover:border-secondary hover:shadow-lg hover:shadow-secondary/20",
@@ -49,6 +49,5 @@ export function ProcessCard({ process }: ProcessCardProps) {
         {process.category}
       </span>
     </button>
-    </Link>
   )
 }
