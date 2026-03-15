@@ -164,7 +164,7 @@ function RefundDetail({
                   <Button
                     onClick={handleApprove}
                     disabled={isActing}
-                    className="w-full gap-2 bg-green-600 hover:bg-green-700 text-white"
+                    className="w-full gap-2 bg-sk-teal hover:bg-sk-teal-hover text-white"
                   >
                     {isActing ? (
                       <Loader2 className="size-4 animate-spin" />

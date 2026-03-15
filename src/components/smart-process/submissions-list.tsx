@@ -3,7 +3,7 @@ import { formatDistanceToNow } from "date-fns"
 import { processFlows } from "@/lib/store"
 import { StatusBadge } from "./status-badge"
 import { SubmissionRowSkeleton } from "./skeleton-loaders"
-import { Stepper } from "./stepper"
+import { Stepper } from "@/components/shared/stepper"
 import { stepLabels } from "@/lib/store"
 import { useAuth } from "@/context/auth-provider"
 import {

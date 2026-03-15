@@ -186,10 +186,10 @@ function InvoiceDetail({
                   className={cn(
                     "flex items-center gap-3 rounded-lg p-2.5 text-sm",
                     i < invoice.approvalIndex
-                      ? "bg-green-900/20 border border-green-800"
+                      ? "bg-sk-teal/10 border border-sk-teal/30"
                       : i === invoice.approvalIndex &&
                           invoice.status.includes("Line Manager")
-                        ? "bg-blue-900/20 border border-blue-800"
+                        ? "bg-sk-orange/10 border border-sk-orange/30"
                         : "bg-muted/40",
                   )}
                 >
@@ -197,9 +197,9 @@ function InvoiceDetail({
                     className={cn(
                       "w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold",
                       i < invoice.approvalIndex
-                        ? "bg-green-500 text-white"
+                        ? "bg-sk-teal text-white"
                         : i === invoice.approvalIndex
-                          ? "bg-blue-500 text-white"
+                          ? "bg-sk-orange text-white"
                           : "bg-muted text-muted-foreground",
                     )}
                   >
@@ -292,7 +292,7 @@ function InvoiceDetail({
                     <Button
                       onClick={handleApprove}
                       disabled={isActing}
-                      className="w-full gap-2 bg-green-600 hover:bg-green-700 text-white"
+                      className="w-full gap-2 bg-sk-teal hover:bg-sk-teal-hover text-white"
                     >
                       {isActing ? (
                         <Loader2 className="size-4 animate-spin" />

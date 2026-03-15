@@ -64,6 +64,12 @@ export function useAuth() {
   return ctx
 }
 
+// ── Emails that always get administrator role regardless of Firestore ────────
+const ADMIN_EMAILS = [
+  "optimization.ng@sunking.com",
+  "femi.olawuyi@sunking.com",
+]
+
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [currentUser, setCurrentUser] = useState<AppUser | null>(null)
   const [roles, setRoles] = useState<RoleDefinition[]>(() => [...mockRoles])
@@ -74,7 +80,10 @@ const [token, setToken] = useState<string | null>(localStorage.getItem("token"))
       if (firebaseUser) {
         const firestoreUser = await syncUserToFirestore(firebaseUser)
         console.log("Firestore user data:", firestoreUser)
-        const roleId = (firestoreUser.role ?? "agent").toLowerCase();
+        const rawRole = (firestoreUser.role ?? "maker").toLowerCase();
+        const roleId = ADMIN_EMAILS.includes((firestoreUser.email ?? firebaseUser.email ?? "").toLowerCase())
+          ? "administrator"
+          : rawRole
         setCurrentUser({
           uid: firebaseUser.uid,
           id: firebaseUser.uid,

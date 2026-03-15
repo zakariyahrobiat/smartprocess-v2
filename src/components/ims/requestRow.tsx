@@ -16,8 +16,8 @@ export default function RequestRow({
  id,
   meta,
   status,
-  iconColor = "text-green-400",
-  iconBg = "bg-green-900/30 border-green-800",
+  iconColor = "text-sk-orange",
+  iconBg = "bg-sk-orange/10 border-sk-orange/20",
   onClick,
 }: RequestRowProps) {
   return (

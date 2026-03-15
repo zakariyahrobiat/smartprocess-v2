@@ -5,7 +5,7 @@ type StatusType = "refund" | "invoice";
 const REFUND_STATUS_COLORS: Record<string, string> = {
   "Pending Receivable Approval":
     "bg-yellow-500/10 text-yellow-400 border-yellow-500/20",
-  "Pending Approval": "bg-blue-500/10 text-blue-400 border-blue-500/20",
+  "Pending Approval": "bg-sk-teal/10 text-sk-teal border-sk-teal/20",
   Approved: "bg-green-500/10 text-green-400 border-green-500/20",
   Processing: "bg-cyan-500/10 text-cyan-400 border-cyan-500/20",
   Paid: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
@@ -15,9 +15,9 @@ const REFUND_STATUS_COLORS: Record<string, string> = {
 const INVOICE_STATUS_COLORS: Record<string, string> = {
   "Pending Line Manager Approval":
     "bg-yellow-500/10 text-yellow-400 border-yellow-500/20",
-  "Pending Finance Approval": "bg-blue-500/10 text-blue-400 border-blue-500/20",
+  "Pending Finance Approval": "bg-sk-teal/10 text-sk-teal border-sk-teal/20",
   "Pending Manager Approval":
-    "bg-purple-500/10 text-purple-400 border-purple-500/20",
+    "bg-sk-orange/10 text-sk-orange border-sk-orange/20",
   Approved: "bg-green-500/10 text-green-400 border-green-500/20",
   Processing: "bg-cyan-500/10 text-cyan-400 border-cyan-500/20",
   Paid: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",

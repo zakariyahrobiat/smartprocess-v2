@@ -78,7 +78,7 @@ const navigate = useNavigate()
         {can("ims_submit_refund") && (
           <Button
             onClick={() => navigate("/ims/refunds/new")}
-            className="gap-2 bg-cyan-600 hover:bg-cyan-700 text-white"
+            className="gap-2 bg-sk-teal hover:bg-sk-teal-hover text-white"
           >
             <Plus className="size-4" /> Submit Refund
           </Button>
@@ -125,8 +125,8 @@ const navigate = useNavigate()
                 FormatDate(r.submissionDate).toLocaleDateString(),
               ]}
               status={r.status}
-              iconColor="text-cyan-400"
-              iconBg="bg-cyan-900/30 border-cyan-800"
+              iconColor="text-sk-teal"
+              iconBg="bg-sk-teal/10 border-sk-teal/30"
               onClick={() => navigate(`/ims/refunds/${r.id}`)}
             />
           ))

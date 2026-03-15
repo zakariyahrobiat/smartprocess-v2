@@ -3,7 +3,7 @@ import { formatDistanceToNow } from "date-fns"
 import { processFlows, mockAuditTrail, stepLabels } from "@/lib/store"
 import { StatusBadge } from "./status-badge"
 import { AuditTimeline } from "./audit-timeline"
-import { Stepper } from "./stepper"
+import { Stepper } from "@/components/shared/stepper"
 import { SubmissionRowSkeleton } from "./skeleton-loaders"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
@@ -199,7 +199,7 @@ export function CheckerView() {
                   />
                 </div>
                 <div className="flex flex-col gap-2">
-                  <Button onClick={() => handleAction("approve")} disabled={isActing} className="w-full gap-2 bg-green-600 hover:bg-green-700 text-white">
+                  <Button onClick={() => handleAction("approve")} disabled={isActing} className="w-full gap-2 bg-sk-teal hover:bg-sk-teal-hover text-white">
                     <CheckCircle2 className="size-4" /> Approve
                   </Button>
                   <Button onClick={() => handleAction("reject")} disabled={isActing} variant="outline" className="w-full gap-2 border-destructive text-destructive hover:bg-destructive/10">

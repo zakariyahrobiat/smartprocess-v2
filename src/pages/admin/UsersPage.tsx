@@ -70,15 +70,15 @@ export default function UsersPage() {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Search users..."
-          className="w-full bg-gray-900 border border-gray-700 rounded-lg pl-9 pr-3 py-2 text-white text-sm placeholder-gray-500 focus:outline-none focus:border-green-500"
+          className="w-full bg-background border border-input rounded-lg pl-9 pr-3 py-2 text-foreground text-sm placeholder:text-muted-foreground focus:outline-none focus:border-sk-teal"
         />
       </div>
 
       {/* Table */}
-      <div className="rounded-xl border border-gray-800 overflow-hidden">
+      <div className="rounded-xl border border-border overflow-hidden">
         <table className="w-full text-sm">
           <thead>
-            <tr className="border-b border-gray-800 bg-gray-900/50">
+            <tr className="border-b border-border bg-muted/50">
               <th className="text-left text-gray-400 font-medium px-4 py-3">User</th>
               <th className="text-left text-gray-400 font-medium px-4 py-3">Role</th>
               <th className="text-left text-gray-400 font-medium px-4 py-3">Last Login</th>
@@ -88,11 +88,11 @@ export default function UsersPage() {
           </thead>
           <tbody>
             {filtered.map((user) => (
-              <tr key={user.id} className="border-t border-gray-800/50 hover:bg-gray-900/30 transition">
+              <tr key={user.id} className="border-t border-border/50 hover:bg-muted/30 transition">
                 {/* User */}
                 <td className="px-4 py-3">
                   <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-full bg-green-700 flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
+                    <div className="w-8 h-8 rounded-full bg-sk-teal flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
                       {initials(user.displayName)}
                     </div>
                     <div>
@@ -106,7 +106,7 @@ export default function UsersPage() {
                   <select
                     value={user.roleId}
                     onChange={(e) => handleRoleChange(user.id, e.target.value)}
-                    className="bg-gray-800 border border-gray-700 rounded-lg px-2 py-1.5 text-white text-xs focus:outline-none focus:border-green-500 cursor-pointer"
+                    className="bg-background border border-input rounded-lg px-2 py-1.5 text-foreground text-xs focus:outline-none focus:border-sk-teal cursor-pointer"
                   >
                     {allRoles.map((role) => (
                       <option key={role.id} value={role.id}>
@@ -122,7 +122,7 @@ export default function UsersPage() {
                 {/* Status */}
                 <td className="px-4 py-3">
                   <span className={`inline-flex items-center gap-1 text-xs font-medium px-2 py-0.5 rounded-full ${
-                    user.isActive ? "bg-green-900/40 text-green-400" : "bg-gray-800 text-gray-500"
+                    user.isActive ? "bg-sk-teal/15 text-sk-teal" : "bg-muted text-muted-foreground"
                   }`}>
                     {user.isActive ? <CheckCircle className="w-3 h-3" /> : <XCircle className="w-3 h-3" />}
                     {user.isActive ? "Active" : "Inactive"}

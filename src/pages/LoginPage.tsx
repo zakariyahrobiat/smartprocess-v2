@@ -11,18 +11,39 @@ export default function LoginPage() {
   }, [currentUser, loading, navigate])
 
   return (
-    <div className="min-h-screen bg-gray-950 flex items-center justify-center">
-      <div className="bg-gray-900 border border-gray-800 rounded-2xl p-10 w-full max-w-sm text-center shadow-xl">
-        <div className="flex items-center justify-center gap-2 mb-8">
-          <div className="w-3 h-3 rounded-full bg-green-500" />
-          <span className="text-white font-semibold text-lg">SmartProcess</span>
+    <div className="min-h-screen bg-background flex items-center justify-center">
+      <div className="bg-card border border-border rounded-2xl p-10 w-full max-w-sm text-center shadow-xl">
+
+        {/* SK Logo mark */}
+        <div className="flex items-center justify-center gap-3 mb-8">
+          <div className="flex size-10 items-center justify-center rounded-xl bg-sk-teal">
+            <svg viewBox="0 0 24 24" className="size-5" fill="none" aria-hidden="true">
+              <circle cx="12" cy="12" r="5" fill="#fff" />
+              <g stroke="#F47B20" strokeWidth="1.8" strokeLinecap="round">
+                <line x1="12" y1="1" x2="12" y2="4" />
+                <line x1="12" y1="20" x2="12" y2="23" />
+                <line x1="1" y1="12" x2="4" y2="12" />
+                <line x1="20" y1="12" x2="23" y2="12" />
+                <line x1="4.2" y1="4.2" x2="6.3" y2="6.3" />
+                <line x1="17.7" y1="17.7" x2="19.8" y2="19.8" />
+                <line x1="4.2" y1="19.8" x2="6.3" y2="17.7" />
+                <line x1="17.7" y1="6.3" x2="19.8" y2="4.2" />
+              </g>
+            </svg>
+          </div>
+          <div className="flex flex-col text-left">
+            <span className="text-foreground font-bold text-base leading-tight">Sun King</span>
+            <span className="text-muted-foreground text-xs leading-tight">SmartProcess v2</span>
+          </div>
         </div>
-        <h1 className="text-white text-2xl font-bold mb-2">Welcome back</h1>
-        <p className="text-gray-400 text-sm mb-8">Sign in with your Sun King Google account</p>
+
+        <h1 className="text-foreground text-2xl font-bold mb-2">Welcome back</h1>
+        <p className="text-muted-foreground text-sm mb-8">Sign in with your Sun King Google account</p>
+
         <button
           onClick={signIn}
           disabled={loading}
-          className="w-full flex items-center justify-center gap-3 bg-white text-gray-800 font-medium rounded-lg px-4 py-3 hover:bg-gray-100 transition disabled:opacity-50"
+          className="w-full flex items-center justify-center gap-3 bg-white text-gray-800 font-medium rounded-lg px-4 py-3 hover:bg-gray-50 border border-border transition disabled:opacity-50"
         >
           <svg className="w-5 h-5" viewBox="0 0 24 24">
             <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -32,6 +53,10 @@ export default function LoginPage() {
           </svg>
           {loading ? 'Signing in...' : 'Continue with Google'}
         </button>
+
+        <p className="mt-6 text-xs text-muted-foreground">
+          Restricted to @sunking.com accounts
+        </p>
       </div>
     </div>
   )
