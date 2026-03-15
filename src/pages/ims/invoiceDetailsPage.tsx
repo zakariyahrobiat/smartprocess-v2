@@ -1,8 +1,9 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useAuth } from "@/context/auth-provider";
-import { getInvoiceById, type Invoice } from "@/lib/imsService";
+import { type Invoice } from "@/lib/imsService";
 import InvoiceDetail from "@/components/ims/invoiceDetail";
+import { getInvoice } from "@/services/ims.service";
 
 export default function InvoiceDetailPage() {
   const { id } = useParams();
@@ -21,11 +22,12 @@ export default function InvoiceDetailPage() {
 
   useEffect(() => {
     if (!id) return;
-
-    getInvoiceById(id).then((data) => {
+    const fetchInvoice = async () => {
+      const data = await getInvoice(id);
       setInvoice(data);
       setLoading(false);
-    });
+    }
+    fetchInvoice();
   }, [id]);
 
   if (loading) return <div>Loading...</div>;

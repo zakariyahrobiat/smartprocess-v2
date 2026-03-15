@@ -3,7 +3,7 @@ import { useAuth } from "@/context/auth-provider"
 import { Plus } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import {
-  subscribeToMyInvoices, subscribeToAllInvoices,
+  // subscribeToMyInvoices, subscribeToAllInvoices,
   type Invoice, 
 } from "@/lib/imsService"
 import AnalyticsCards from "@/components/ims/analyticsCard"
@@ -13,6 +13,7 @@ import RequestRow from "@/components/ims/requestRow"
 import FormatAmount from "@/components/formatAmount"
 import FormatDate from "@/components/formatDate"
 import EmptyState from "../../components/ims/emptystate"
+import { getAnalytics, getInvoices } from "@/services/ims.service"
 
 
 type FilterTab = "all" | "pending" | "approved" | "paid" | "rejected"
@@ -20,19 +21,50 @@ export default function InvoicesPage() {
   const navigate = useNavigate()
   const { currentUser, can } = useAuth()
   const [invoices, setInvoices] = useState<Invoice[]>([])
+  const [total, setTotal] = useState(0);
+  const [page, setPage] = useState(1);
+  const pageSize = 20;
   const [isLoading, setIsLoading] = useState(true)
   const [filterTab, setFilterTab] = useState<FilterTab>("all")
   const [search, setSearch] = useState("")
+  const [analytics, setAnalytics] = useState({
+    total: 0,
+    pending_line_manager: 0,
+    pending_finance: 0,
+    pending_senior_manager: 0,
+    approved: 0,
+    processing: 0,
+    paid: 0,
+    rejected: 0,
+  });
 
   const canViewAll = can("ims_view_all_invoices")
 
   useEffect(() => {
-    if (!currentUser) return
-    const unsub = canViewAll
-      ? subscribeToAllInvoices(data => { setInvoices(data); setIsLoading(false) })
-      : subscribeToMyInvoices(currentUser.email, data => { setInvoices(data); setIsLoading(false) })
-    return () => unsub()
-  }, [currentUser, canViewAll])
+   const fetchInvoices = async () => {
+      if (!currentUser) return
+      const data = await getInvoices({
+        page, pageSize
+      })
+      // const data = canViewAll
+      //   ? await fetchAllInvoices()
+      //   : await fetchMyInvoices(currentUser.email)
+      setInvoices(data.items)
+      setTotal(data.total)
+      setIsLoading(false)
+    }
+    const fetchAnalytics = async () => {
+      const data = await getAnalytics()
+      setAnalytics(data.invoices);
+    }
+    fetchInvoices()
+    fetchAnalytics()
+    // if (!currentUser) return
+    // const unsub = canViewAll
+    //   ? subscribeToAllInvoices(data => { setInvoices(data); setIsLoading(false) })
+    //   : subscribeToMyInvoices(currentUser.email, data => { setInvoices(data); setIsLoading(false) })
+    // return () => unsub()
+  }, [currentUser, page])
 
   const filtered = invoices.filter(inv => {
     const matchTab =
@@ -77,7 +109,7 @@ export default function InvoicesPage() {
         )}
       </div>
 
-      <AnalyticsCards items={invoices} label="Total Invoices" />
+      <AnalyticsCards stats={analytics} label="Total Invoices" />
       <Filter
         search={search}
         setSearch={setSearch}
@@ -108,7 +140,7 @@ export default function InvoicesPage() {
         ) : (
           filtered.map((inv) => (
             <RequestRow
-              key={inv.id}
+              key={inv.requestId}
               title={inv.vendor}
               id={inv.requestId}
               meta={[
@@ -118,7 +150,7 @@ export default function InvoicesPage() {
                 FormatDate(inv.createdAt).toLocaleDateString(),
               ]}
               status={inv.status}
-              onClick={() => navigate(`/ims/invoices/${inv.id}`)}
+              onClick={() => navigate(`/ims/invoices/${inv.requestId}`)}
             />
           ))
         )}

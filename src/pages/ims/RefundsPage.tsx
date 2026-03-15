@@ -2,7 +2,6 @@ import { useState, useEffect } from "react"
 import { useAuth } from "@/context/auth-provider"
 import { Plus } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import {subscribeToAllRefunds, subscribeToMyRefunds, type Refund } from "@/lib/imsService"
 import AnalyticsCards from "@/components/ims/analyticsCard"
 import { useNavigate } from "react-router-dom"
 import Filter from "@/components/ims/filter"
@@ -10,6 +9,8 @@ import RequestRow from "@/components/ims/requestRow"
 import FormatAmount from "@/components/formatAmount"
 import FormatDate from "@/components/formatDate"
 import EmptyState from "../../components/ims/emptystate"
+import { getAnalytics } from "@/services/ims.service"
+import type { Refund } from "@/lib/imsTypes"
 
 type FilterTab = "all" | "pending" | "approved" | "paid" | "rejected"
 
@@ -19,14 +20,28 @@ export default function RefundsPage() {
   const [isLoading, setIsLoading] = useState(true)
   const [filterTab, setFilterTab] = useState<FilterTab>("all")
   const [search, setSearch] = useState("")
+  const [analytics, setAnalytics] = useState({
+    total: 0,
+    pending_receivable: 0,
+    pending_approval: 0,
+    approved: 0,
+    processing: 0,
+    paid: 0,
+    rejected: 0
+  })
   const canViewAll = can("ims_view_all_refunds")
 const navigate = useNavigate()
   useEffect(() => {
-    if (!currentUser) return
-    const unsub = canViewAll
-      ? subscribeToAllRefunds(data => { setRefunds(data); setIsLoading(false) })
-      : subscribeToMyRefunds(currentUser.email, data => { setRefunds(data); setIsLoading(false) })
-    return () => unsub()
+    const fetchRefunds = async () => {
+      const data = await getAnalytics()
+      setAnalytics(data.refunds)
+    }
+    fetchRefunds()
+    // if (!currentUser) return
+    // const unsub = canViewAll
+    //   ? subscribeToAllRefunds(data => { setRefunds(data); setIsLoading(false) })
+    //   : subscribeToMyRefunds(currentUser.email, data => { setRefunds(data); setIsLoading(false) })
+    // return () => unsub()
   }, [currentUser, canViewAll])
 
   const filtered = refunds.filter(r => {
@@ -70,7 +85,7 @@ const navigate = useNavigate()
         )}
       </div>
 
-      <AnalyticsCards items={refunds} label="TotalRefunds" />
+      <AnalyticsCards stats={analytics} label="TotalRefunds" />
       <Filter
         search={search}
         setSearch={setSearch}

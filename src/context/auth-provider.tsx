@@ -53,6 +53,7 @@ interface AuthContextValue {
   updateRolePermission: (roleId: string, perm: Permission, enabled: boolean) => void
   addRole: (role: RoleDefinition) => void
   deleteRole: (roleId: string) => void
+  token: string | null
   }
 
 const AuthContext = createContext<AuthContextValue | null>(null)
@@ -73,12 +74,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [currentUser, setCurrentUser] = useState<AppUser | null>(null)
   const [roles, setRoles] = useState<RoleDefinition[]>(() => [...mockRoles])
   const [loading, setLoading] = useState(true)
-
+const [token, setToken] = useState<string | null>(localStorage.getItem("token"))
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser: FirebaseUser | null) => {
       if (firebaseUser) {
         const firestoreUser = await syncUserToFirestore(firebaseUser)
-        const rawRole = firestoreUser.role ?? "maker"
+        console.log("Firestore user data:", firestoreUser)
+        const rawRole = (firestoreUser.role ?? "maker").toLowerCase();
         const roleId = ADMIN_EMAILS.includes((firestoreUser.email ?? firebaseUser.email ?? "").toLowerCase())
           ? "administrator"
           : rawRole
@@ -135,7 +137,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const signIn = async () => {
     setLoading(true)
     try {
-      await signInWithPopup(auth, googleProvider)
+      const response = await signInWithPopup(auth, googleProvider)
+      const token = await response.user.getIdToken()
+      localStorage.setItem("token", token)
+      setToken(token)
+      console.log(currentUser?.roleId, "signed in with token:", token);
+      
+
     } catch (error) {
       console.error("Sign in error:", error)
       setLoading(false)
@@ -145,6 +153,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const signOutUser = async () => {
     await signOut(auth)
     setCurrentUser(null)
+    setToken(null)
   }
 
   const updateRolePermission = useCallback(
@@ -180,9 +189,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       signOutUser,
       updateRolePermission,
       addRole,
-      deleteRole, 
+      deleteRole, token
     }),
-    [currentUser, currentRole, roles, can, accessibleProjects, accessibleModules, loading]
+    [currentUser, currentRole, roles, can, accessibleProjects, accessibleModules, loading, token]
   )
 
   return <AuthContext value={value}>{children}</AuthContext>
