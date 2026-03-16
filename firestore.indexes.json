@@ -1,0 +1,11 @@
+{
+  "indexes": [
+    {"collectionGroup":"sa_checkins","queryScope":"COLLECTION","fields":[{"fieldPath":"assistant_uid","order":"ASCENDING"},{"fieldPath":"date_str","order":"ASCENDING"}]},
+    {"collectionGroup":"sa_checkins","queryScope":"COLLECTION","fields":[{"fieldPath":"assistant_uid","order":"ASCENDING"},{"fieldPath":"month_str","order":"ASCENDING"},{"fieldPath":"timestamp","order":"DESCENDING"}]},
+    {"collectionGroup":"sa_checkins","queryScope":"COLLECTION","fields":[{"fieldPath":"assistant_uid","order":"ASCENDING"},{"fieldPath":"month_str","order":"ASCENDING"},{"fieldPath":"checkin_method","order":"ASCENDING"}]},
+    {"collectionGroup":"sa_assistants","queryScope":"COLLECTION","fields":[{"fieldPath":"supervisor_email","order":"ASCENDING"},{"fieldPath":"enrollment_status","order":"ASCENDING"}]},
+    {"collectionGroup":"sa_assistants","queryScope":"COLLECTION","fields":[{"fieldPath":"country","order":"ASCENDING"},{"fieldPath":"enrollment_status","order":"ASCENDING"}]},
+    {"collectionGroup":"sa_enrollments","queryScope":"COLLECTION","fields":[{"fieldPath":"status","order":"ASCENDING"},{"fieldPath":"submitted_at","order":"DESCENDING"}]},
+    {"collectionGroup":"sa_attendance","queryScope":"COLLECTION","fields":[{"fieldPath":"assistant_id","order":"ASCENDING"},{"fieldPath":"year","order":"ASCENDING"},{"fieldPath":"month","order":"ASCENDING"}]}
+  ]
+}
